@@ -657,5 +657,5 @@ function bpc_enqueue_assets()
     wp_enqueue_style('dashicons');
 
     $version = defined('WP_DEBUG') && WP_DEBUG ? time() : '2.5.1';
-    wp_enqueue_style('bpc-styles', plugin_dir_url(__FILE__) . 'bp-characters.css', array('dashicons'), $version);
+    wp_enqueue_style('bpc-styles', BPC_URL . 'includes/assets/css/bp-characters.css', array('dashicons'), $version);
 }

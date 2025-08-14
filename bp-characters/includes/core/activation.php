@@ -23,7 +23,7 @@ function bpc_bpc_deactivate()
 function bpc_check_dependencies()
 {
     if (!class_exists('BuddyPress')) {
-        add_action('admin_notices', function bpc_() {
+        add_action('admin_notices', function () {
             echo '<div class="error"><p>BuddyPress Characters requires BuddyPress to be active.</p></div>';
         });
         return false;
