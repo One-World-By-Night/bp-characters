@@ -127,7 +127,7 @@ function bpc_mobile_character_fix()
 
         // If we're still here, force the template
         if (!did_action('bp_screens')) {
-            $this->characters_screen();
+            bpc_characters_screen();
         }
     }
 }
@@ -256,7 +256,7 @@ function bpc_setup_nav()
         'name' => __('Characters', 'bp-characters'),
         'slug' => 'characters',
         'position' => 30,
-        'screen_function' => [$this, 'characters_screen'],
+        'screen_function' => 'bpc_characters_screen',
         'default_subnav_slug' => 'list',
         'show_for_displayed_user' => true,
         'item_css_id' => 'characters'
@@ -279,7 +279,7 @@ function bpc_setup_nav()
             'slug' => 'list',
             'parent_url' => trailingslashit($user_domain . 'characters'),
             'parent_slug' => 'characters',
-            'screen_function' => [$this, 'characters_screen'],
+            'screen_function' => 'bpc_characters_screen',
             'position' => 10,
             'user_has_access' => true,
             'link' => $user_domain . 'characters/' . $force_param
@@ -292,7 +292,7 @@ function bpc_setup_nav()
                 'slug' => 'create',
                 'parent_url' => trailingslashit($user_domain . 'characters'),
                 'parent_slug' => 'characters',
-                'screen_function' => [$this, 'create_screen'],
+                'screen_function' => 'bpc_create_screen',
                 'position' => 20,
                 'user_has_access' => bp_is_my_profile(),
                 'link' => $user_domain . 'characters/create/' . $force_param
@@ -314,7 +314,7 @@ function bpc_handle_screens()
     switch ($action) {
         case 'edit':
             if (bp_is_my_profile()) {
-                $this->edit_screen();
+                bpc_edit_screen();
             } else {
                 bp_core_redirect(bp_displayed_user_domain() . 'characters/');
             }
@@ -322,14 +322,14 @@ function bpc_handle_screens()
 
         case 'create':
             if (bp_is_my_profile()) {
-                $this->create_screen();
+                bpc_create_screen();
             } else {
                 bp_core_redirect(bp_displayed_user_domain() . 'characters/');
             }
             break;
 
         default:
-            $this->characters_screen();
+            bpc_characters_screen();
             break;
     }
 }
@@ -337,8 +337,7 @@ function bpc_handle_screens()
 function bpc_characters_screen()
 {
     add_action('bp_template_title', 'bpc_characters_title');
-    add_action('bp_template_content', 'bpc_create_form');
-    'screen_function' => 'bpc_characters_screen',
+    add_action('bp_template_content', 'bpc_list_characters');
 
     // Try multiple template paths for better compatibility
     $templates = apply_filters('bpc_template_hierarchy', [
@@ -385,7 +384,7 @@ function bpc_edit_screen()
     }
 
     add_action('bp_template_title', 'bpc_characters_title');
-    add_action('bp_template_content', 'bpc_create_form');
+    add_action('bp_template_content', 'bpc_edit_form');
 
     $templates = apply_filters('bpc_template_hierarchy', [
         'members/single/plugins.php',
@@ -569,7 +568,7 @@ function bpc_create_form()
             <?php if ($force_param): ?>
                 <input type="hidden" name="force_characters" value="1">
             <?php endif; ?>
-            <?php $this->render_fields(); ?>
+            <?php bpc_render_fields(); ?>
             <div class="form-actions">
                 <button type="submit" name="submit_character" class="button button-primary"><?php _e('Create Character', 'bp-characters'); ?></button>
                 <a href="<?php echo bp_loggedin_user_domain() . 'characters/' . $force_param; ?>" class="button"><?php _e('Cancel', 'bp-characters'); ?></a>
@@ -633,7 +632,7 @@ function bpc_edit_form()
             <?php if ($force_param): ?>
                 <input type="hidden" name="force_characters" value="1">
             <?php endif; ?>
-            <?php $this->render_fields($values); ?>
+            <?php bpc_render_fields($values); ?>
             <div class="form-actions">
                 <button type="submit" name="update_character" class="button button-primary"><?php _e('Update Character', 'bp-characters'); ?></button>
                 <a href="<?php echo bp_loggedin_user_domain() . 'characters/' . $force_param; ?>" class="button"><?php _e('Cancel', 'bp-characters'); ?></a>
