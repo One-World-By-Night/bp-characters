@@ -668,13 +668,13 @@ function bpc_enqueue_assets()
     $version = defined('WP_DEBUG') && WP_DEBUG ? time() : '2.5.1';
     wp_enqueue_style('bpc-styles', BPC_URL . 'includes/assets/css/bp-characters.css', array('dashicons'), $version);
 
-    // Add Select2 for create/edit forms
+    // Always load Select2 on character pages
+    wp_enqueue_style('select2', BPC_URL . 'includes/assets/css/select2.min.css', array(), '4.1.0-rc.0');
+    wp_enqueue_script('select2', BPC_URL . 'includes/assets/js/select2.min.js', array('jquery'), '4.1.0-rc.0', true);
+
+    // Initialize Select2 on create/edit forms
     $action = bp_current_action();
     if ($action === 'create' || $action === 'edit') {
-        wp_enqueue_style('select2', 'https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css');
-        wp_enqueue_script('select2', 'https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js', array('jquery'));
-
-        // Initialize Select2
         wp_add_inline_script('select2', "
             jQuery(document).ready(function($) {
                 $('#character_type').select2({
