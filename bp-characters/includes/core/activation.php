@@ -20,7 +20,7 @@ function bpc_bpc_deactivate()
     flush_rewrite_rules();
 }
 
-public function bpc_check_dependencies()
+function bpc_check_dependencies()
 {
     if (!class_exists('BuddyPress')) {
         add_action('admin_notices', function bpc_() {
@@ -31,7 +31,7 @@ public function bpc_check_dependencies()
     return true;
 }
 
-public function bpc_register_bp_component()
+function bpc_register_bp_component()
 {
     if (!function_exists('bp_is_active')) return;
 
@@ -50,7 +50,7 @@ public function bpc_register_bp_component()
     }
 }
 
-public function bpc_register_post_type()
+function bpc_register_post_type()
 {
     $args = [
         'labels' => [

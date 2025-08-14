@@ -336,8 +336,9 @@ function bpc_handle_screens()
 
 function bpc_characters_screen()
 {
-    add_action('bp_template_title', ['characters_title']);
-    add_action('bp_template_content', 'bpc_list_characters');
+    add_action('bp_template_title', 'bpc_characters_title');
+    add_action('bp_template_content', 'bpc_create_form');
+    'screen_function' => 'bpc_characters_screen',
 
     // Try multiple template paths for better compatibility
     $templates = apply_filters('bpc_template_hierarchy', [
@@ -360,8 +361,8 @@ function bpc_create_screen()
         return;
     }
 
-    add_action('bp_template_title', [$this, 'create_title']);
-    add_action('bp_template_content', [$this, 'create_form']);
+    add_action('bp_template_title', 'bpc_characters_title');
+    add_action('bp_template_content', 'bpc_create_form');
 
     $templates = apply_filters('bpc_template_hierarchy', [
         'members/single/plugins.php',
@@ -383,8 +384,8 @@ function bpc_edit_screen()
         return;
     }
 
-    add_action('bp_template_title', [$this, 'edit_title']);
-    add_action('bp_template_content', [$this, 'edit_form']);
+    add_action('bp_template_title', 'bpc_characters_title');
+    add_action('bp_template_content', 'bpc_create_form');
 
     $templates = apply_filters('bpc_template_hierarchy', [
         'members/single/plugins.php',
