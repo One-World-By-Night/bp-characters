@@ -9,8 +9,8 @@
 
 defined('ABSPATH') || exit;
 
-// 
-private function render_fields($values = [])
+// render fields for character creation and editing
+function bpc_bpc_render_fields($values = [])
 {
     $defaults = [
         'character_name' => '',

@@ -9,7 +9,7 @@
 
 defined('ABSPATH') || exit;
 
-public function setup_admin_bar($wp_admin_nav = [])
+function bpc_setup_admin_bar($wp_admin_nav = [])
 {
     if (!is_user_logged_in()) return;
 

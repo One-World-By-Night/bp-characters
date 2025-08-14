@@ -9,7 +9,7 @@
 
 defined('ABSPATH') || exit;
 
-public function mobile_early_intercept($wp)
+function bpc_mobile_early_intercept($wp)
 {
     // Check if URL contains /characters
     if (strpos($_SERVER['REQUEST_URI'], '/characters') === false) {
@@ -52,7 +52,7 @@ public function mobile_early_intercept($wp)
     }
 }
 
-public function debug_mobile()
+function bpc_debug_mobile()
 {
     if (strpos($_SERVER['REQUEST_URI'], '/characters') !== false) {
         error_log('BPC Debug - URI: ' . $_SERVER['REQUEST_URI']);
@@ -63,7 +63,7 @@ public function debug_mobile()
     }
 }
 
-public function mobile_character_fix()
+function bpc_mobile_character_fix()
 {
     // Only run if we detect /characters in URL
     if (strpos($_SERVER['REQUEST_URI'], '/characters') === false) {
@@ -135,7 +135,7 @@ public function mobile_character_fix()
 /**
  * Handle search result redirects for characters
  */
-public function handle_character_search_redirect()
+function bpc_handle_character_search_redirect()
 {
     // Check if we're on a character query var URL
     if (get_query_var('bp_character')) {
@@ -166,7 +166,7 @@ public function handle_character_search_redirect()
 /**
  * Fix character permalinks in search results
  */
-public function fix_search_permalink($permalink, $post)
+function bpc_fix_search_permalink($permalink, $post)
 {
     if ($post && get_post_type($post) === 'bp_character') {
         $author_id = $post->post_author;
@@ -183,7 +183,7 @@ public function fix_search_permalink($permalink, $post)
 /**
  * Include characters in WordPress search
  */
-public function include_in_search($query)
+function bpc_include_in_search($query)
 {
     if (!is_admin() && $query->is_main_query() && $query->is_search()) {
         $post_types = $query->get('post_type');
@@ -205,7 +205,7 @@ public function include_in_search($query)
 /**
  * Make character meta fields searchable
  */
-public function search_character_meta($search, $wp_query)
+function bpc_search_character_meta($search, $wp_query)
 {
     if (!is_admin() && $wp_query->is_main_query() && $wp_query->is_search()) {
         global $wpdb;
@@ -238,7 +238,7 @@ public function search_character_meta($search, $wp_query)
 /** 
  * Setup BuddyPress navigation for characters
  */
-public function setup_nav()
+function bpc_setup_nav()
 {
     global $bp;
 
@@ -305,7 +305,7 @@ public function setup_nav()
  * Handle all character screens
  */
 
-public function handle_screens()
+function bpc_handle_screens()
 {
     if (bp_current_component() !== 'characters') return;
 
@@ -334,10 +334,10 @@ public function handle_screens()
     }
 }
 
-public function characters_screen()
+function bpc_characters_screen()
 {
-    add_action('bp_template_title', [$this, 'characters_title']);
-    add_action('bp_template_content', [$this, 'list_characters']);
+    add_action('bp_template_title', ['characters_title']);
+    add_action('bp_template_content', 'bpc_list_characters');
 
     // Try multiple template paths for better compatibility
     $templates = apply_filters('bpc_template_hierarchy', [
@@ -353,7 +353,7 @@ public function characters_screen()
     bp_core_load_template($templates);
 }
 
-public function create_screen()
+function bpc_create_screen()
 {
     if (!bp_is_my_profile()) {
         bp_core_redirect(bp_displayed_user_domain());
@@ -376,7 +376,7 @@ public function create_screen()
     bp_core_load_template($templates);
 }
 
-public function edit_screen()
+function bpc_edit_screen()
 {
     if (!bp_is_my_profile()) {
         bp_core_redirect(bp_displayed_user_domain() . 'characters/');
@@ -399,22 +399,22 @@ public function edit_screen()
     bp_core_load_template($templates);
 }
 
-public function characters_title()
+function bpc_characters_title()
 {
     echo __('Characters', 'bp-characters');
 }
 
-public function create_title()
+function bpc_create_title()
 {
     echo __('Create New Character', 'bp-characters');
 }
 
-public function edit_title()
+function bpc_edit_title()
 {
     echo __('Edit Character', 'bp-characters');
 }
 
-public function list_characters()
+function bpc_list_characters()
 {
     // Check if mobile and add force parameter
     $force_param = '';
@@ -534,7 +534,7 @@ public function list_characters()
 <?php
 }
 
-public function create_form()
+function bpc_create_form()
 {
     // Check if mobile and add force parameter
     $force_param = '';
@@ -578,7 +578,7 @@ public function create_form()
 <?php
 }
 
-public function edit_form()
+function bpc_edit_form()
 {
     // Check if mobile and add force parameter
     $force_param = '';
@@ -642,7 +642,7 @@ public function edit_form()
 <?php
 }
 
-public function enqueue_assets()
+function bpc_enqueue_assets()
 {
     if (!function_exists('bp_is_user') || !bp_is_user() || bp_current_component() !== 'characters') return;
 

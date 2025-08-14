@@ -9,21 +9,21 @@
 
 defined('ABSPATH') || exit;
 
-function bpc_activate()
+function bpc_bpc_activate()
 {
     $this->register_post_type();
     flush_rewrite_rules();
 }
 
-public function bpc_deactivate()
+function bpc_bpc_deactivate()
 {
     flush_rewrite_rules();
 }
 
-public function check_dependencies()
+public function bpc_check_dependencies()
 {
     if (!class_exists('BuddyPress')) {
-        add_action('admin_notices', function () {
+        add_action('admin_notices', function bpc_() {
             echo '<div class="error"><p>BuddyPress Characters requires BuddyPress to be active.</p></div>';
         });
         return false;
@@ -31,7 +31,7 @@ public function check_dependencies()
     return true;
 }
 
-public function register_bp_component()
+public function bpc_register_bp_component()
 {
     if (!function_exists('bp_is_active')) return;
 
@@ -50,7 +50,7 @@ public function register_bp_component()
     }
 }
 
-public function register_post_type()
+public function bpc_register_post_type()
 {
     $args = [
         'labels' => [
