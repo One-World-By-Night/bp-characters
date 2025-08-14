@@ -31,22 +31,22 @@ class BPC_Characters_Plugin
         // Core hooks - init early for mobile
         add_action('init', [$this, 'register_post_type']);
         add_action('init', [$this, 'register_bp_component'], 20);
-        
+
         // Mobile fix - intercept VERY early with multiple hooks
         add_action('parse_request', [$this, 'mobile_early_intercept'], 1);
         add_action('template_redirect', [$this, 'mobile_character_fix'], 1);
         add_action('wp', [$this, 'mobile_character_fix'], 1);
-        
+
         // Setup navigation
         add_action('bp_setup_nav', [$this, 'setup_nav'], 100);
         add_action('bp_setup_admin_bar', [$this, 'setup_admin_bar'], 100);
-        
+
         // Assets
         add_action('wp_enqueue_scripts', [$this, 'enqueue_assets']);
 
         // Handle screens
         add_action('bp_screens', [$this, 'handle_screens']);
-        
+
         // Search integration
         add_filter('pre_get_posts', [$this, 'include_in_search']);
         add_filter('the_permalink', [$this, 'fix_search_permalink'], 10, 2);
@@ -55,7 +55,7 @@ class BPC_Characters_Plugin
         // Activation/Deactivation
         register_activation_hook(__FILE__, [$this, 'activate']);
         register_deactivation_hook(__FILE__, [$this, 'deactivate']);
-        
+
         // Debug mobile issues
         if (defined('WP_DEBUG') && WP_DEBUG) {
             add_action('init', [$this, 'debug_mobile']);
@@ -82,20 +82,27 @@ class BPC_Characters_Plugin
         if (strpos($_SERVER['REQUEST_URI'], '/characters') === false) {
             return;
         }
-        
+
         // Detect mobile using multiple methods
         $is_mobile = false;
-        
+
         // Method 1: WordPress mobile detection
         if (function_exists('wp_is_mobile') && wp_is_mobile()) {
             $is_mobile = true;
         }
-        
+
         // Method 2: User agent detection
         if (isset($_SERVER['HTTP_USER_AGENT'])) {
             $mobile_agents = [
-                'Mobile', 'Android', 'iPhone', 'iPad', 'iPod', 
-                'BlackBerry', 'Windows Phone', 'Opera Mini', 'IEMobile'
+                'Mobile',
+                'Android',
+                'iPhone',
+                'iPad',
+                'iPod',
+                'BlackBerry',
+                'Windows Phone',
+                'Opera Mini',
+                'IEMobile'
             ];
             foreach ($mobile_agents as $agent) {
                 if (stripos($_SERVER['HTTP_USER_AGENT'], $agent) !== false) {
@@ -104,14 +111,14 @@ class BPC_Characters_Plugin
                 }
             }
         }
-        
+
         // If mobile, add force parameter internally
         if ($is_mobile && !isset($_GET['force_characters'])) {
             $_GET['force_characters'] = 1;
             $_REQUEST['force_characters'] = 1;
         }
     }
-    
+
     /**
      * Debug mobile issues
      */
@@ -135,41 +142,41 @@ class BPC_Characters_Plugin
         if (strpos($_SERVER['REQUEST_URI'], '/characters') === false) {
             return;
         }
-        
+
         // Check if it's a member characters URL
         if (!preg_match('/\/members\/([^\/]+)\/characters/', $_SERVER['REQUEST_URI'], $matches)) {
             return;
         }
-        
+
         // Get the username
         $username = $matches[1];
-        
+
         // Find the user
         $user = get_user_by('slug', $username);
         if (!$user) {
             $user = get_user_by('login', $username);
         }
-        
+
         if (!$user) {
             return;
         }
-        
+
         // Check multiple mobile detection methods
-        $is_mobile = wp_is_mobile() || 
-                    (isset($_SERVER['HTTP_USER_AGENT']) && preg_match('/Mobile|Android|iPhone|iPad/i', $_SERVER['HTTP_USER_AGENT'])) ||
-                    (isset($_SERVER['HTTP_X_WAP_PROFILE'])) ||
-                    (isset($_SERVER['HTTP_ACCEPT']) && preg_match('/wap/i', $_SERVER['HTTP_ACCEPT']));
-        
+        $is_mobile = wp_is_mobile() ||
+            (isset($_SERVER['HTTP_USER_AGENT']) && preg_match('/Mobile|Android|iPhone|iPad/i', $_SERVER['HTTP_USER_AGENT'])) ||
+            (isset($_SERVER['HTTP_X_WAP_PROFILE'])) ||
+            (isset($_SERVER['HTTP_ACCEPT']) && preg_match('/wap/i', $_SERVER['HTTP_ACCEPT']));
+
         // Option 1: Auto-redirect mobile to force_characters URL
         if ($is_mobile && !isset($_GET['force_characters'])) {
             $redirect_url = add_query_arg('force_characters', '1', $_SERVER['REQUEST_URI']);
             wp_redirect($redirect_url);
             exit;
         }
-        
+
         // Force BuddyPress to recognize this request
         global $bp, $wp_query;
-        
+
         // Set up BuddyPress globals
         $bp->current_component = 'characters';
         $bp->current_action = bp_action_variable(0) ?: 'list';
@@ -177,20 +184,20 @@ class BPC_Characters_Plugin
         $bp->displayed_user->id = $user->ID;
         $bp->displayed_user->userdata = $user;
         $bp->displayed_user->domain = bp_core_get_user_domain($user->ID);
-        
+
         // Prevent WordPress from thinking this is a 404
         $wp_query->is_404 = false;
         status_header(200);
-        
+
         // ALWAYS fire BP screens on mobile or with force parameter
         if ($is_mobile || isset($_GET['force_characters'])) {
             // Remove any potential redirect actions
             remove_all_actions('template_redirect', 10);
             remove_all_actions('template_redirect', 99);
-            
+
             // Fire BP screens
             do_action('bp_screens');
-            
+
             // If we're still here, force the template
             if (!did_action('bp_screens')) {
                 $this->characters_screen();
@@ -206,20 +213,20 @@ class BPC_Characters_Plugin
         // Check if we're on a character query var URL
         if (get_query_var('bp_character')) {
             $character_slug = get_query_var('bp_character');
-            
+
             // Try to find the character post
             $args = [
                 'name' => $character_slug,
                 'post_type' => 'bp_character',
                 'posts_per_page' => 1
             ];
-            
+
             $character = get_posts($args);
-            
+
             if (!empty($character)) {
                 $author_id = $character[0]->post_author;
                 $author_domain = bp_core_get_user_domain($author_id);
-                
+
                 if ($author_domain) {
                     // Redirect to the author's characters page
                     wp_redirect($author_domain . 'characters/');
@@ -237,12 +244,12 @@ class BPC_Characters_Plugin
         if ($post && get_post_type($post) === 'bp_character') {
             $author_id = $post->post_author;
             $author_domain = bp_core_get_user_domain($author_id);
-            
+
             if ($author_domain) {
                 return $author_domain . 'characters/';
             }
         }
-        
+
         return $permalink;
     }
 
@@ -263,14 +270,14 @@ class BPC_Characters_Plugin
     public function register_bp_component()
     {
         if (!function_exists('bp_is_active')) return;
-        
+
         global $bp;
-        
+
         // Register as active component
         if (!isset($bp->active_components['characters'])) {
             $bp->active_components['characters'] = 1;
         }
-        
+
         // Add to pages array for mobile compatibility
         if (!isset($bp->pages->characters)) {
             $bp->pages->characters = new stdClass();
@@ -304,7 +311,7 @@ class BPC_Characters_Plugin
             'rewrite' => false,
             'query_var' => 'bp_character'
         ];
-        
+
         register_post_type('bp_character', $args);
     }
 
@@ -315,13 +322,13 @@ class BPC_Characters_Plugin
     {
         if (!is_admin() && $query->is_main_query() && $query->is_search()) {
             $post_types = $query->get('post_type');
-            
+
             if (empty($post_types)) {
                 $post_types = ['post', 'page'];
             } elseif (is_string($post_types)) {
                 $post_types = [$post_types];
             }
-            
+
             if (!in_array('bp_character', $post_types)) {
                 $post_types[] = 'bp_character';
                 $query->set('post_type', $post_types);
@@ -330,19 +337,52 @@ class BPC_Characters_Plugin
         return $query;
     }
 
+    /**
+     * Make character meta fields searchable
+     */
+    public function search_character_meta($search, $wp_query)
+    {
+        if (!is_admin() && $wp_query->is_main_query() && $wp_query->is_search()) {
+            global $wpdb;
+
+            $search_term = $wp_query->get('s');
+            if (empty($search_term)) return $search;
+
+            // Add meta search for character fields
+            $meta_search = $wpdb->prepare(
+                " OR (
+                {$wpdb->posts}.post_type = 'bp_character' AND (
+                    EXISTS (
+                        SELECT 1 FROM {$wpdb->postmeta} 
+                        WHERE {$wpdb->postmeta}.post_id = {$wpdb->posts}.ID 
+                        AND {$wpdb->postmeta}.meta_key IN ('character_type', 'character_chronicle')
+                        AND {$wpdb->postmeta}.meta_value LIKE %s
+                    )
+                )
+            )",
+                '%' . $wpdb->esc_like($search_term) . '%'
+            );
+
+            // Insert before the closing parenthesis
+            $search = str_replace(')))', ')) ' . $meta_search . ')', $search);
+        }
+
+        return $search;
+    }
+
     public function setup_nav()
     {
         global $bp;
-        
+
         // Skip if no BuddyPress
         if (!$bp) return;
-        
+
         // Check if mobile and add force parameter to URLs
         $force_param = '';
         if (wp_is_mobile() || (isset($_SERVER['HTTP_USER_AGENT']) && preg_match('/Mobile|Android|iPhone/i', $_SERVER['HTTP_USER_AGENT']))) {
             $force_param = '?force_characters=1';
         }
-        
+
         // Main nav item - always add it
         $nav_args = [
             'name' => __('Characters', 'bp-characters'),
@@ -353,18 +393,18 @@ class BPC_Characters_Plugin
             'show_for_displayed_user' => true,
             'item_css_id' => 'characters'
         ];
-        
+
         // Add force parameter for mobile
         if ($force_param && isset($bp->displayed_user->domain)) {
             $nav_args['link'] = bp_displayed_user_domain() . 'characters/' . $force_param;
         }
-        
+
         bp_core_new_nav_item($nav_args);
-        
+
         // Only add subnav if we have a displayed user
         if (isset($bp->displayed_user->id)) {
             $user_domain = bp_displayed_user_domain();
-            
+
             // List subnav
             bp_core_new_subnav_item([
                 'name' => __('My Characters', 'bp-characters'),
@@ -399,11 +439,11 @@ class BPC_Characters_Plugin
     public function setup_admin_bar($wp_admin_nav = [])
     {
         if (!is_user_logged_in()) return;
-        
+
         global $wp_admin_bar;
-        
+
         $user_domain = bp_loggedin_user_domain();
-        
+
         // Add main characters menu
         $wp_admin_bar->add_menu([
             'parent' => 'my-account-buddypress',
@@ -411,7 +451,7 @@ class BPC_Characters_Plugin
             'title' => __('Characters', 'bp-characters'),
             'href' => trailingslashit($user_domain . 'characters')
         ]);
-        
+
         // Add submenu items
         $wp_admin_bar->add_menu([
             'parent' => 'my-account-characters',
@@ -419,7 +459,7 @@ class BPC_Characters_Plugin
             'title' => __('My Characters', 'bp-characters'),
             'href' => trailingslashit($user_domain . 'characters')
         ]);
-        
+
         $wp_admin_bar->add_menu([
             'parent' => 'my-account-characters',
             'id' => 'my-account-characters-create',
@@ -434,9 +474,9 @@ class BPC_Characters_Plugin
     public function handle_screens()
     {
         if (bp_current_component() !== 'characters') return;
-        
+
         $action = bp_current_action();
-        
+
         switch ($action) {
             case 'edit':
                 if (bp_is_my_profile()) {
@@ -445,7 +485,7 @@ class BPC_Characters_Plugin
                     bp_core_redirect(bp_displayed_user_domain() . 'characters/');
                 }
                 break;
-                
+
             case 'create':
                 if (bp_is_my_profile()) {
                     $this->create_screen();
@@ -453,7 +493,7 @@ class BPC_Characters_Plugin
                     bp_core_redirect(bp_displayed_user_domain() . 'characters/');
                 }
                 break;
-                
+
             default:
                 $this->characters_screen();
                 break;
@@ -464,7 +504,7 @@ class BPC_Characters_Plugin
     {
         add_action('bp_template_title', [$this, 'characters_title']);
         add_action('bp_template_content', [$this, 'list_characters']);
-        
+
         // Try multiple template paths for better compatibility
         $templates = apply_filters('bpc_template_hierarchy', [
             'members/single/plugins.php',
@@ -475,7 +515,7 @@ class BPC_Characters_Plugin
             'community/members/single/plugins.php',
             'community/members/single/home.php'
         ]);
-        
+
         bp_core_load_template($templates);
     }
 
@@ -485,10 +525,10 @@ class BPC_Characters_Plugin
             bp_core_redirect(bp_displayed_user_domain());
             return;
         }
-        
+
         add_action('bp_template_title', [$this, 'create_title']);
         add_action('bp_template_content', [$this, 'create_form']);
-        
+
         $templates = apply_filters('bpc_template_hierarchy', [
             'members/single/plugins.php',
             'members/single/plugin.php',
@@ -498,7 +538,7 @@ class BPC_Characters_Plugin
             'community/members/single/plugins.php',
             'community/members/single/home.php'
         ]);
-        
+
         bp_core_load_template($templates);
     }
 
@@ -508,10 +548,10 @@ class BPC_Characters_Plugin
             bp_core_redirect(bp_displayed_user_domain() . 'characters/');
             return;
         }
-        
+
         add_action('bp_template_title', [$this, 'edit_title']);
         add_action('bp_template_content', [$this, 'edit_form']);
-        
+
         $templates = apply_filters('bpc_template_hierarchy', [
             'members/single/plugins.php',
             'members/single/plugin.php',
@@ -521,7 +561,7 @@ class BPC_Characters_Plugin
             'community/members/single/plugins.php',
             'community/members/single/home.php'
         ]);
-        
+
         bp_core_load_template($templates);
     }
 
@@ -547,7 +587,7 @@ class BPC_Characters_Plugin
         if (wp_is_mobile() || (isset($_SERVER['HTTP_USER_AGENT']) && preg_match('/Mobile|Android|iPhone/i', $_SERVER['HTTP_USER_AGENT']))) {
             $force_param = '?force_characters=1';
         }
-        
+
         // Handle delete
         if (bp_is_my_profile() && isset($_GET['delete']) && isset($_GET['_wpnonce'])) {
             $character_id = intval($_GET['delete']);
@@ -600,7 +640,7 @@ class BPC_Characters_Plugin
                                 </div>
                             </div>
 
-                            <?php if (bp_is_my_profile()) : 
+                            <?php if (bp_is_my_profile()) :
                                 $delete_url = bp_loggedin_user_domain() . 'characters/';
                                 if ($force_param) {
                                     $delete_url .= '?force_characters=1&delete=' . $character_id;
@@ -630,7 +670,7 @@ class BPC_Characters_Plugin
                     jQuery(document).ready(function($) {
                         // Mobile-friendly accordion
                         var isMobile = window.innerWidth <= 768 || /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-                        
+
                         if (isMobile) {
                             // Simple toggle for mobile
                             $('.character-accordion-header').on('click', function(e) {
@@ -667,7 +707,7 @@ class BPC_Characters_Plugin
         if (wp_is_mobile() || (isset($_SERVER['HTTP_USER_AGENT']) && preg_match('/Mobile|Android|iPhone/i', $_SERVER['HTTP_USER_AGENT']))) {
             $force_param = '?force_characters=1';
         }
-        
+
         if (isset($_POST['submit_character']) && wp_verify_nonce($_POST['_wpnonce'], 'create_character')) {
             $character_id = wp_insert_post([
                 'post_title' => sanitize_text_field($_POST['character_name']),
@@ -711,7 +751,7 @@ class BPC_Characters_Plugin
         if (wp_is_mobile() || (isset($_SERVER['HTTP_USER_AGENT']) && preg_match('/Mobile|Android|iPhone/i', $_SERVER['HTTP_USER_AGENT']))) {
             $force_param = '?force_characters=1';
         }
-        
+
         $action_vars = bp_action_variables();
         $character_id = isset($action_vars[0]) ? intval($action_vars[0]) : 0;
 
@@ -813,13 +853,13 @@ class BPC_Characters_Plugin
         if (!function_exists('bp_is_user') || !bp_is_user() || bp_current_component() !== 'characters') return;
 
         wp_enqueue_script('jquery');
-        
+
         // Only load jQuery UI accordion on desktop
         if (!wp_is_mobile()) {
             wp_enqueue_script('jquery-ui-accordion');
             wp_enqueue_style('jquery-ui', 'https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css');
         }
-        
+
         wp_enqueue_style('dashicons');
 
         $version = defined('WP_DEBUG') && WP_DEBUG ? time() : '2.5.1';
