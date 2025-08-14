@@ -12,14 +12,6 @@ defined('ABSPATH') || exit;
 // Load plugin core bootstraps first
 require_once dirname(__FILE__) . '/core/init.php';
 
-// Autoload classes (optional PSR-like loader for 'classes/' dir)
-$classes = glob(__DIR__ . '/classes/*.php');
-if ($classes) {
-    foreach ($classes as $class_file) {
-        require_once $class_file;
-    }
-}
-
 // Load helper functions
 require_once __DIR__ . '/helper/init.php';
 
@@ -37,3 +29,11 @@ require_once __DIR__ . '/shortcodes/init.php';
 
 // Load utilities
 require_once __DIR__ . '/utils/init.php';
+
+// Autoload classes (optional PSR-like loader for 'classes/' dir)
+$classes = glob(__DIR__ . '/classes/*.php');
+if ($classes) {
+    foreach ($classes as $class_file) {
+        require_once $class_file;
+    }
+}
