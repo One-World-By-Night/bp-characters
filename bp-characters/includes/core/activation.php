@@ -9,13 +9,13 @@
 
 defined('ABSPATH') || exit;
 
-public function activate()
+function bpc_activate()
 {
     $this->register_post_type();
     flush_rewrite_rules();
 }
 
-public function deactivate()
+public function bpc_deactivate()
 {
     flush_rewrite_rules();
 }

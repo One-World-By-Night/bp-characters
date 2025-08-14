@@ -17,34 +17,36 @@
 
 defined('ABSPATH') || exit;
 
-// Define path-related constants if not already defined
-if (!defined('FILE')) {
-    define('FILE', __FILE__);
-}
-if (!defined('DIR')) {
-    define('DIR', plugin_dir_path(__FILE__));
-}
-if (!defined('URL')) {
-    define('URL', plugin_dir_url(__FILE__));
-}
-if (!defined('VERSION')) {
-    define('VERSION', '1.0.0');
-}
-if (!defined('TEXTDOMAIN')) {
-    define('TEXTDOMAIN', 'bp-characters');
-}
-if (!defined('ASSETS_URL')) {
-    define('ASSETS_URL', constant('URL') . 'includes/assets/');
-}
-if (!defined('CSS_URL')) {
-    define('CSS_URL', constant('ASSETS_URL') . 'css/');
-}
-if (!defined('JS_URL')) {
-    define('JS_URL', constant('ASSETS_URL') . 'js/');
-}
+// Define constants
+define('BPC_FILE', __FILE__);
+define('BPC_DIR', plugin_dir_path(__FILE__));
+define('BPC_URL', plugin_dir_url(__FILE__));
+define('BPC_VERSION', '2.0.0');
 
-// Bootstrap the plugin/module
-require_once constant('DIR') . 'includes/init.php';
+// Load all includes
+require_once BPC_DIR . 'includes/init.php';
 
-// Initialize plugin
-BPC_Characters_Plugin::get_instance();
+// Hook everything up directly
+add_action('plugins_loaded', 'bpc_check_dependencies');
+add_action('init', 'bpc_register_post_type');
+add_action('init', 'bpc_register_bp_component', 20);
+add_action('parse_request', 'bpc_mobile_early_intercept', 1);
+add_action('template_redirect', 'bpc_mobile_character_fix', 1);
+add_action('wp', 'bpc_mobile_character_fix', 1);
+add_action('bp_setup_nav', 'bpc_setup_nav', 100);
+add_action('bp_setup_admin_bar', 'bpc_setup_admin_bar', 100);
+add_action('wp_enqueue_scripts', 'bpc_enqueue_assets');
+add_action('bp_screens', 'bpc_handle_screens');
+add_filter('pre_get_posts', 'bpc_include_in_search');
+add_filter('posts_search', 'bpc_search_character_meta', 10, 2);
+add_filter('the_permalink', 'bpc_fix_search_permalink', 10, 2);
+add_action('template_redirect', 'bpc_handle_character_search_redirect');
+
+// Activation/Deactivation
+register_activation_hook(__FILE__, 'bpc_activate');
+register_deactivation_hook(__FILE__, 'bpc_deactivate');
+
+// Debug
+if (defined('WP_DEBUG') && WP_DEBUG) {
+    add_action('init', 'bpc_debug_mobile');
+}
