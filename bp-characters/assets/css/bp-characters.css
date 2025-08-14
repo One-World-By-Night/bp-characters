@@ -1,0 +1,414 @@
+/* BuddyPress Characters Plugin Styles 
+ * Version: 2.5.1
+ * Simplified for compatibility
+ */
+
+/* Main wrapper */
+.characters-wrapper {
+    padding: 20px 0;
+    width: 100%;
+}
+
+/* jQuery UI Accordion */
+#characters-accordion {
+    width: 100%;
+    margin: 0 0 20px 0;
+}
+
+/* Custom header class to avoid conflicts */
+.character-accordion-header {
+    padding: 20px 25px;
+    background: rgba(0,0,0,0.05);
+    border: 1px solid rgba(0,0,0,0.1);
+    margin-top: 5px;
+    min-height: 80px;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.character-accordion-header:first-child {
+    margin-top: 0;
+}
+
+.character-accordion-header:hover {
+    background: rgba(0,0,0,0.08);
+}
+
+.character-accordion-header.ui-state-active {
+    background: rgba(0,0,0,0.1);
+}
+
+/* Character Header Content */
+.character-header-content {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    width: 100%;
+}
+
+.character-name {
+    font-size: 22px;
+    font-weight: bold;
+    line-height: 1.3;
+    color: inherit;
+}
+
+.character-type {
+    font-size: 16px;
+    font-weight: normal;
+    line-height: 1.3;
+    opacity: 0.8;
+    color: inherit;
+}
+
+/* Accordion Content */
+.character-accordion-content {
+    padding: 25px 30px 20px 30px;
+    border: 1px solid rgba(0,0,0,0.1);
+    border-top: 0;
+    background: rgba(255,255,255,0.02);
+    position: relative;
+}
+
+/* Character Fields */
+.character-field {
+    margin-bottom: 25px;
+    color: inherit;
+}
+
+.character-field strong {
+    display: block;
+    margin-bottom: 10px;
+    font-size: 15px;
+    font-weight: 600;
+    color: inherit;
+}
+
+/* Character Description Box */
+.character-description {
+    padding: 20px;
+    background: rgba(0,0,0,0.03);
+    border-left: 4px solid currentColor;
+    line-height: 1.6;
+    border-radius: 3px;
+    margin-bottom: 10px;
+    color: inherit;
+}
+
+.character-description p {
+    color: inherit;
+    margin: 0 0 1em 0;
+}
+
+.character-description p:last-child {
+    margin-bottom: 0;
+}
+
+/* Character Actions */
+.character-actions {
+    padding: 25px 0 0 0;
+    margin-top: 30px;
+    border-top: 1px solid rgba(0,0,0,0.1);
+    display: flex;
+    gap: 15px;
+    clear: both;
+}
+
+.action-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    text-decoration: none;
+    transition: all 0.3s;
+    position: relative;
+    background: rgba(0,0,0,0.05);
+}
+
+.action-icon .dashicons {
+    font-size: 20px;
+    width: 20px;
+    height: 20px;
+}
+
+.edit-icon {
+    border: 2px solid #0073aa;
+    color: #0073aa;
+}
+
+.edit-icon:hover {
+    background: #0073aa;
+    color: #fff;
+    transform: scale(1.1);
+}
+
+.delete-icon {
+    border: 2px solid #d63638;
+    color: #d63638;
+}
+
+.delete-icon:hover {
+    background: #d63638;
+    color: #fff;
+    transform: scale(1.1);
+}
+
+/* Forms */
+.character-form-wrapper {
+    max-width: 100%;
+}
+
+.character-form-wrapper h2 {
+    margin-bottom: 30px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid rgba(0,0,0,0.1);
+    font-size: 24px;
+    color: inherit;
+}
+
+.character-form .form-field {
+    margin-bottom: 25px;
+}
+
+.character-form label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    font-size: 15px;
+    color: inherit;
+}
+
+.character-form input[type="text"] {
+    width: 100%;
+    max-width: 600px;
+    padding: 10px 12px;
+    border: 1px solid rgba(0,0,0,0.2);
+    border-radius: 4px;
+    font-size: 14px;
+    background: rgba(255,255,255,0.05);
+    color: inherit;
+}
+
+.character-form input[type="text"]:focus {
+    outline: none;
+    border-color: #0073aa;
+    box-shadow: 0 0 0 2px rgba(0, 115, 170, 0.2);
+}
+
+.character-form .required {
+    color: #d63638;
+}
+
+/* WordPress Editor */
+.character-form .wp-editor-wrap {
+    max-width: 100%;
+}
+
+.character-form .wp-editor-container {
+    border: 1px solid rgba(0,0,0,0.2);
+}
+
+/* Form Actions */
+.form-actions {
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(0,0,0,0.1);
+}
+
+/* Buttons */
+.button {
+    padding: 8px 16px;
+    text-decoration: none;
+    border: 1px solid rgba(0,0,0,0.2);
+    border-radius: 4px;
+    background: rgba(0,0,0,0.05);
+    color: inherit;
+    cursor: pointer;
+    display: inline-block;
+    margin-right: 10px;
+    font-size: 14px;
+    transition: all 0.3s;
+}
+
+.button:hover {
+    background: rgba(0,0,0,0.08);
+    text-decoration: none;
+}
+
+.button-primary {
+    background: #0073aa;
+    border-color: #0073aa;
+    color: #fff;
+}
+
+.button-primary:hover {
+    background: #005177;
+    border-color: #005177;
+    color: #fff;
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+    .character-accordion-header {
+        background: rgba(255,255,255,0.05);
+        border-color: rgba(255,255,255,0.1);
+    }
+    
+    .character-accordion-header:hover {
+        background: rgba(255,255,255,0.08);
+    }
+    
+    .character-accordion-header.ui-state-active {
+        background: rgba(255,255,255,0.1);
+    }
+    
+    .character-accordion-content {
+        background: rgba(255,255,255,0.02);
+        border-color: rgba(255,255,255,0.1);
+    }
+    
+    .character-description {
+        background: rgba(255,255,255,0.03);
+    }
+    
+    .character-actions {
+        border-top-color: rgba(255,255,255,0.1);
+    }
+    
+    .action-icon {
+        background: rgba(255,255,255,0.05);
+    }
+    
+    .character-form-wrapper h2 {
+        border-bottom-color: rgba(255,255,255,0.1);
+    }
+    
+    .character-form input[type="text"] {
+        border-color: rgba(255,255,255,0.2);
+        background: rgba(255,255,255,0.05);
+    }
+    
+    .form-actions {
+        border-top-color: rgba(255,255,255,0.1);
+    }
+    
+    .button {
+        border-color: rgba(255,255,255,0.2);
+        background: rgba(255,255,255,0.05);
+    }
+    
+    .button:hover {
+        background: rgba(255,255,255,0.08);
+    }
+}
+
+/* WP Dark Mode plugin support */
+html.wp-dark-mode-active .character-accordion-header,
+body.wp-dark-mode-active .character-accordion-header {
+    background: rgba(255,255,255,0.05);
+    border-color: rgba(255,255,255,0.1);
+}
+
+html.wp-dark-mode-active .character-accordion-header:hover,
+body.wp-dark-mode-active .character-accordion-header:hover {
+    background: rgba(255,255,255,0.08);
+}
+
+html.wp-dark-mode-active .character-accordion-header.ui-state-active,
+body.wp-dark-mode-active .character-accordion-header.ui-state-active {
+    background: rgba(255,255,255,0.1);
+}
+
+/* Elementor dark mode support */
+.elementor-scheme-dark .character-accordion-header {
+    background: rgba(255,255,255,0.05);
+    border-color: rgba(255,255,255,0.1);
+}
+
+.elementor-scheme-dark .character-accordion-header:hover {
+    background: rgba(255,255,255,0.08);
+}
+
+.elementor-scheme-dark .character-accordion-header.ui-state-active {
+    background: rgba(255,255,255,0.1);
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+    .characters-wrapper {
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+    
+    .character-accordion-header {
+        padding: 12px 15px;
+        min-height: auto;
+    }
+    
+    .character-accordion-content {
+        padding: 15px;
+    }
+    
+    .character-name {
+        font-size: 18px;
+    }
+    
+    .character-type {
+        font-size: 14px;
+    }
+    
+    .character-description {
+        padding: 12px;
+        border-left-width: 3px;
+    }
+    
+    .character-form input[type="text"] {
+        max-width: 100%;
+        font-size: 16px; /* Prevents zoom on iOS */
+    }
+    
+    .action-icon {
+        width: 45px;
+        height: 45px;
+    }
+    
+    .character-actions {
+        justify-content: center;
+    }
+    
+    .form-actions .button {
+        display: block;
+        width: 100%;
+        margin: 5px 0;
+        text-align: center;
+    }
+}
+
+@media (max-width: 480px) {
+    .character-accordion-header {
+        padding: 10px;
+    }
+    
+    .character-name {
+        font-size: 16px;
+    }
+    
+    .character-type {
+        font-size: 13px;
+    }
+}
+
+/* Ensure text inherits colors */
+.characters-wrapper,
+.characters-wrapper * {
+    color: inherit;
+}
+
+.character-description p,
+.character-field p {
+    color: inherit !important;
+}
