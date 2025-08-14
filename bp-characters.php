@@ -49,6 +49,7 @@ class BPC_Characters_Plugin
 
         // Search integration
         add_filter('pre_get_posts', [$this, 'include_in_search']);
+        add_filter('posts_search', [$this, 'search_character_meta'], 10, 2);
         add_filter('the_permalink', [$this, 'fix_search_permalink'], 10, 2);
         add_action('template_redirect', [$this, 'handle_character_search_redirect']);
 
