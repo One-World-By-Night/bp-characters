@@ -19,6 +19,9 @@ function bpc_render_fields($values = [])
         'character_description' => ''
     ];
     $values = wp_parse_args($values, $defaults);
+
+    // Get creature types from static data
+    $creature_types = bpc_get_creature_types();
 ?>
     <div class="form-field">
         <label for="character_name"><?php _e('Character Name:', 'bp-characters'); ?> <span class="required">*</span></label>
@@ -27,7 +30,14 @@ function bpc_render_fields($values = [])
 
     <div class="form-field">
         <label for="character_type"><?php _e('Creature Type:', 'bp-characters'); ?> <span class="required">*</span></label>
-        <input type="text" id="character_type" name="character_type" value="<?php echo esc_attr($values['character_type']); ?>" required>
+        <select id="character_type" name="character_type" required>
+            <option value=""><?php _e('Select a creature type...', 'bp-characters'); ?></option>
+            <?php foreach ($creature_types as $value => $label) : ?>
+                <option value="<?php echo esc_attr($value); ?>" <?php selected($values['character_type'], $value); ?>>
+                    <?php echo esc_html($label); ?>
+                </option>
+            <?php endforeach; ?>
+        </select>
     </div>
 
     <div class="form-field">

@@ -412,3 +412,38 @@ body.wp-dark-mode-active .character-accordion-header.ui-state-active {
 .character-field p {
     color: inherit !important;
 }
+
+/* Select dropdown styling */
+.character-form select {
+    width: 100%;
+    max-width: 600px;
+    padding: 10px 12px;
+    border: 1px solid rgba(0,0,0,0.2);
+    border-radius: 4px;
+    font-size: 14px;
+    background: rgba(255,255,255,0.05);
+    color: inherit;
+    cursor: pointer;
+}
+
+.character-form select:focus {
+    outline: none;
+    border-color: #0073aa;
+    box-shadow: 0 0 0 2px rgba(0, 115, 170, 0.2);
+}
+
+/* Dark mode support for select */
+@media (prefers-color-scheme: dark) {
+    .character-form select {
+        border-color: rgba(255,255,255,0.2);
+        background: rgba(255,255,255,0.05);
+    }
+}
+
+/* Mobile styling for select */
+@media (max-width: 768px) {
+    .character-form select {
+        max-width: 100%;
+        font-size: 16px; /* Prevents zoom on iOS */
+    }
+}
