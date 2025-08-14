@@ -452,7 +452,16 @@ function bpc_list_characters()
                 <?php while ($characters->have_posts()) : $characters->the_post();
                     $character_id = get_the_ID();
                     $name = get_post_meta($character_id, 'character_name', true) ?: get_the_title();
-                    $type = get_post_meta($character_id, 'character_type', true);
+
+                    // Get the raw type value
+                    $type_key = get_post_meta($character_id, 'character_type', true);
+
+                    // Get the creature types array
+                    $creature_types = bpc_get_creature_types();
+
+                    // Look up the pretty display name
+                    $type = isset($creature_types[$type_key]) ? $creature_types[$type_key] : $type_key;
+
                     $chronicle = get_post_meta($character_id, 'character_chronicle', true);
                     $content = get_the_content();
                 ?>
