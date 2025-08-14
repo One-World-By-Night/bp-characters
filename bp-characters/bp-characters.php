@@ -45,3 +45,6 @@ if (!defined($prefix . 'JS_URL')) {
 
 // Bootstrap the plugin/module
 require_once constant($prefix . 'DIR') . 'includes/init.php';
+
+// Initialize plugin
+BPC_Characters_Plugin::get_instance();
