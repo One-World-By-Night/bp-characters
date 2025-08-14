@@ -49,7 +49,6 @@ class BPC_Characters_Plugin
 
         // Search integration
         add_filter('pre_get_posts', [$this, 'include_in_search']);
-        add_filter('posts_search', [$this, 'search_character_meta'], 10, 2);
         add_filter('the_permalink', [$this, 'fix_search_permalink'], 10, 2);
         add_action('template_redirect', [$this, 'handle_character_search_redirect']);
 
@@ -336,39 +335,6 @@ class BPC_Characters_Plugin
             }
         }
         return $query;
-    }
-
-    /**
-     * Make character meta fields searchable
-     */
-    public function search_character_meta($search, $wp_query)
-    {
-        if (!is_admin() && $wp_query->is_main_query() && $wp_query->is_search()) {
-            global $wpdb;
-
-            $search_term = $wp_query->get('s');
-            if (empty($search_term)) return $search;
-
-            // Add meta search for character fields
-            $meta_search = $wpdb->prepare(
-                " OR (
-                {$wpdb->posts}.post_type = 'bp_character' AND (
-                    EXISTS (
-                        SELECT 1 FROM {$wpdb->postmeta} 
-                        WHERE {$wpdb->postmeta}.post_id = {$wpdb->posts}.ID 
-                        AND {$wpdb->postmeta}.meta_key IN ('character_type', 'character_chronicle')
-                        AND {$wpdb->postmeta}.meta_value LIKE %s
-                    )
-                )
-            )",
-                '%' . $wpdb->esc_like($search_term) . '%'
-            );
-
-            // Insert before the closing parenthesis
-            $search = str_replace(')))', ')) ' . $meta_search . ')', $search);
-        }
-
-        return $search;
     }
 
     public function setup_nav()
