@@ -18,33 +18,33 @@
 defined('ABSPATH') || exit;
 
 // Define path-related constants if not already defined
-if (!defined($prefix . 'FILE')) {
-    define($prefix . 'FILE', __FILE__);
+if (!defined('FILE')) {
+    define('FILE', __FILE__);
 }
-if (!defined($prefix . 'DIR')) {
-    define($prefix . 'DIR', plugin_dir_path(__FILE__));
+if (!defined('DIR')) {
+    define('DIR', plugin_dir_path(__FILE__));
 }
-if (!defined($prefix . 'URL')) {
-    define($prefix . 'URL', plugin_dir_url(__FILE__));
+if (!defined('URL')) {
+    define('URL', plugin_dir_url(__FILE__));
 }
-if (!defined($prefix . 'VERSION')) {
-    define($prefix . 'VERSION', '1.0.0');
+if (!defined('VERSION')) {
+    define('VERSION', '1.0.0');
 }
-if (!defined($prefix . 'TEXTDOMAIN')) {
-    define($prefix . 'TEXTDOMAIN', 'bp-characters');
+if (!defined('TEXTDOMAIN')) {
+    define('TEXTDOMAIN', 'bp-characters');
 }
-if (!defined($prefix . 'ASSETS_URL')) {
-    define($prefix . 'ASSETS_URL', constant($prefix . 'URL') . 'includes/assets/');
+if (!defined('ASSETS_URL')) {
+    define('ASSETS_URL', constant('URL') . 'includes/assets/');
 }
-if (!defined($prefix . 'CSS_URL')) {
-    define($prefix . 'CSS_URL', constant($prefix . 'ASSETS_URL') . 'css/');
+if (!defined('CSS_URL')) {
+    define('CSS_URL', constant('ASSETS_URL') . 'css/');
 }
-if (!defined($prefix . 'JS_URL')) {
-    define($prefix . 'JS_URL', constant($prefix . 'ASSETS_URL') . 'js/');
+if (!defined('JS_URL')) {
+    define('JS_URL', constant('ASSETS_URL') . 'js/');
 }
 
 // Bootstrap the plugin/module
-require_once constant($prefix . 'DIR') . 'includes/init.php';
+require_once constant('DIR') . 'includes/init.php';
 
 // Initialize plugin
 BPC_Characters_Plugin::get_instance();
