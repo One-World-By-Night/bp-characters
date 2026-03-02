@@ -1,15 +1,6 @@
 <?php
-
-/** File: includes/fields.php
- * Text Domain: bp-characters
- * version 2.0.0
- * @author greghacke
- * Function: fields functionality for the plugin
- */
-
 defined('ABSPATH') || exit;
 
-// render fields for character creation and editing
 function bpc_render_fields($values = [])
 {
     $defaults = [

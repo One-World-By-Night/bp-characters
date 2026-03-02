@@ -1,12 +1,4 @@
 <?php
-
-/** File: includes/render/render-admin.php
- * Text Domain: bp-characters
- * version 2.0.0
- * @author greghacke
- * Function: render admin functionality for the plugin
- */
-
 defined('ABSPATH') || exit;
 
 function bpc_setup_admin_bar($wp_admin_nav = [])
@@ -17,7 +9,6 @@ function bpc_setup_admin_bar($wp_admin_nav = [])
 
     $user_domain = bp_loggedin_user_domain();
 
-    // Add main characters menu
     $wp_admin_bar->add_menu([
         'parent' => 'my-account-buddypress',
         'id' => 'my-account-characters',
@@ -25,7 +16,6 @@ function bpc_setup_admin_bar($wp_admin_nav = [])
         'href' => trailingslashit($user_domain . 'characters')
     ]);
 
-    // Add submenu items
     $wp_admin_bar->add_menu([
         'parent' => 'my-account-characters',
         'id' => 'my-account-characters-list',
