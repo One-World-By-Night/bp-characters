@@ -1,24 +1,15 @@
 # BuddyPress Characters
 
-BuddyPress plugin that adds character profiles to member pages for One World by Night.
+Adds character profiles to BuddyPress member pages for [One World by Night](https://www.owbn.net/).
 
 **Version:** 2.6.0
-**Requires:** WordPress 6.0+ / PHP 7.4+ / BuddyPress
+**Deployed to:** players.owbn.net
+**Status:** Legacy — will be replaced by [Beyond Elysium](https://github.com/One-World-By-Night/beyond-elysium)
 
-## Installation
+## What It Does
 
-Upload `bp-characters-x.x.x.zip` via **Plugins > Add New > Upload Plugin** and activate.
+Lets players attach character records to their BuddyPress profile. Characters have a creature type, chronicle association, and basic metadata. Search and mobile-friendly display included.
 
-Two entry points exist: the root `bp-characters.php` monolith (standalone class) and the modular `bp-characters/bp-characters.php` with separate includes. Only one should be active.
+## License
 
-## Changelog
-
-### 2.6.0
-- Removed dead stub files and empty JS
-- Stripped comment bloat and redundant PHPDoc
-- Normalized version across both entry points
-
-### 2.5.1
-- Mobile compatibility fixes
-- Search integration for character meta
-- Select2 creature type dropdown
+GPL-2.0-or-later
